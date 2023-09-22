@@ -1,0 +1,1 @@
+struct ID3NoHeaderError<:Exception end

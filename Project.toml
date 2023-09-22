@@ -1,0 +1,9 @@
+name = "ID3v2"
+uuid = "aa8ebd2a-69f4-4101-9c3b-d00e000b16fb"
+authors = ["xing0star <xing0star@live.hk>"]
+version = "0.1.0"
+
+[deps]
+NamedTupleTools = "d9ec5142-1e00-5aa0-9d6a-321866360f50"
+PrecompileTools = "aea7be01-6a6a-4083-8856-8a6e6704d82a"
+StringEncodings = "69024149-9ee7-55f6-a4c4-859efe599b68"
