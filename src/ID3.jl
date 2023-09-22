@@ -1,8 +1,12 @@
 export ID3,version,header,
-save,pretty
+save,pretty,
+MPG123
 struct ID3
     header::ID3Header
     ID3Tags::NamedTuple
+end
+struct MPG123
+    id3::ID3
     io::IO
 end
 
@@ -20,12 +24,14 @@ function ID3(file::AbstractString)
     # close(io)
     seek(io,fullsize(header)+1)
     mark(io)
-    ID3(header,data,io)
+    ID3(header,data),io
 end
-
+MPG123(file::AbstractString)=MPG123(ID3(file)...)
+ID3(x::MPG123)=x.id3
 header(x::ID3)=x.header
 version(x::ID3)=version(x.header)
-
+header(x::MPG123)=header(x)
+version(x::MPG123)=version(x)
 function writeID3Tags(x::NamedTuple)
     res=Vector{UInt8}()
     for (name,data) in convert(Vector{Pair},x)
@@ -73,7 +79,9 @@ function Base.write(io::IO,x::ID3)
     write(io,BitPaddedInt2bytes(_size))
     seekend(io)
 end
-function save(x::ID3,file=x.io.name[7:end-1])
+Base.write(x::MPG123)=write(ID3(x))
+Base.write(io::IO,x::MPG123)=write(io,ID3(x))
+function save(x::MPG123,file=x.io.name[7:end-1])
     f=tempname(".")
     open(f,"w+") do io
         write(io,write(x))
@@ -83,7 +91,7 @@ function save(x::ID3,file=x.io.name[7:end-1])
     reset(x.io)
     mv(f,file, force=true)
 end
-function save(::Val{:io},x::ID3,file=x.io.name[7:end-1])
+function save(::Val{:io},x::MPG123,file=x.io.name[7:end-1])
     f=tempname(".")
     open(f,"w+") do io
         write(io,x)
@@ -100,3 +108,4 @@ function pretty(s::ID3)
     end
         # println(" ",value.text)
 end
+pretty(s::MPG123)=pretty(ID3(s))
