@@ -31,6 +31,16 @@ const EasyID3Map=Dict(
     :TLAN=>"language"
 )
 
+"""
+    EasyID3(x::NamedTuple)
+    EasyID3(x::ID3)
+    EasyID3(x::AbstractString)
+Easier access to ID3 tags.
+
+EasyID3 is a wrapper around mutagen.id3.ID3 to make ID3 tags appear
+more like Vorbis or APEv2 tags.
+Create a Dict returns Frame.
+"""
 function EasyID3(x::NamedTuple)
     res=Dict{String,Frame}()
     for (k,v) in convert(Vector{Pair},x)

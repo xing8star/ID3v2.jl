@@ -10,6 +10,15 @@ struct MPG123
     io::IO
 end
 
+"""
+ID3(file::AbstractString)
+
+# Examples
+```julia-repl
+julia> ID3("yourmusic.mp3")
+ID3(....)
+```
+"""
 function ID3(file::AbstractString)
     io=open(file)
     header=try
